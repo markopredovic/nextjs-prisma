@@ -9,6 +9,8 @@ Example CRUD application using [Jamstack](https://jamstack.org/)
 - CRUD operations
 - [Prisma](https://www.prisma.io/) ORM
 - [Material UI](https://material-ui.com/) design
+- [Formik](https://formik.org/) react forms library
+- [Yup](https://github.com/jquense/yup) form validation
 
 ### Demo and github repos
 

@@ -34,6 +34,12 @@ export default function AboutPage() {
             <li>
               <a href="https://material-ui.com/">Material UI</a> design
             </li>
+            <li>
+              <a href="https://formik.org/">Formik</a> react forms library
+            </li>
+            <li>
+              <a href="https://github.com/jquense/yup">Yup</a> form validation
+            </li>
           </ul>
         </Typography>
         <Typography variant="h4" gutterBottom>
