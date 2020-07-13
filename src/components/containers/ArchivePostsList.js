@@ -15,8 +15,6 @@ const ArchivePostsList = () => {
   if (!data) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
 
-  console.log("archived", data);
-
   return (
     <div>
       <SectionTitle title="Archive" />

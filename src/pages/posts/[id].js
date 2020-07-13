@@ -18,8 +18,6 @@ const PostDetailsPage = () => {
     return <div>Error ...</div>;
   }
 
-  console.log("data", data);
-
   return (
     <Layout>
       <PostDetails post={data.post} />

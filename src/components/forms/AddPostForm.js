@@ -90,7 +90,6 @@ const AddPostForm = () => {
   };
 
   const handleImageUpload = async () => {
-    console.log("handleImageUpload");
     imageRef.current = document.querySelector("#addPostImageUpload");
   };
 

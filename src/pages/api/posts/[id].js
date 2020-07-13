@@ -4,11 +4,7 @@ import { getPost, deletePost, updatePost } from "../../../controllers/post";
 
 export default async function (req, res) {
   const prisma = new PrismaClient();
-
   const id = parseInt(req.query.id);
-
-  console.log("updatePost body", req.body);
-
   let post = null;
 
   try {

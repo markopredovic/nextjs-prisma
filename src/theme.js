@@ -2,6 +2,14 @@ import { createMuiTheme } from "@material-ui/core/styles";
 
 // Create a theme instance.
 const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#123c69",
+    },
+    secondary: {
+      main: "#ac3b61",
+    },
+  },
   overrides: {
     MuiCssBaseline: {
       "@global": {
@@ -10,6 +18,11 @@ const theme = createMuiTheme({
           textDecoration: "auto",
         },
       },
+    },
+  },
+  props: {
+    MuiButton: {
+      disableRipple: true,
     },
   },
 });

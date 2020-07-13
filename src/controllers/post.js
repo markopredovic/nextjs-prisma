@@ -25,7 +25,6 @@ const deletePost = async (id) => {
   }
 };
 const updatePost = async (id, updatedData) => {
-  console.log("updatedData", updatedData);
   try {
     return prisma.post.update({
       where: { id },

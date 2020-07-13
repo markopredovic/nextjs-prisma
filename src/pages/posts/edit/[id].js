@@ -20,8 +20,6 @@ const PostEditPage = () => {
     return <div>Error ...</div>;
   }
 
-  console.log("PostEditPage data", data);
-
   return (
     <Layout>
       <PageTitle title="Post edit page" />
