@@ -12,14 +12,27 @@ import {
   CardActions,
 } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: "1",
   },
   media: {
     height: "300px",
+    [theme.breakpoints.up("sm")]: {
+      height: "350px",
+    },
+    [theme.breakpoints.up("md")]: {
+      height: "300px",
+    },
+    [theme.breakpoints.up("lg")]: {
+      height: "250px",
+    },
   },
-});
+  excerpt: {
+    height: "40px",
+    overflow: "hidden",
+  },
+}));
 
 const PostItem = ({ id, title, content, imageUrl, deletePost }) => {
   const router = useRouter();
@@ -55,7 +68,12 @@ const PostItem = ({ id, title, content, imageUrl, deletePost }) => {
             <Typography gutterBottom variant="h5" component="h2">
               {title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              component="p"
+              className={classes.excerpt}
+            >
               {excerpt}
             </Typography>
           </CardContent>
@@ -88,5 +106,6 @@ PostItem.propTypes = {
   id: PropTypes.number,
   title: PropTypes.string,
   content: PropTypes.string,
+  imageUrl: PropTypes.string,
   deletePost: PropTypes.func,
 };

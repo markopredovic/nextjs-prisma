@@ -56,21 +56,21 @@ const MobileMenu = ({ closeDrawer }) => {
         </ListItem>
         <ListItem button onClick={handleListItemClicked}>
           <ListItemIcon>
-            <Info />
-          </ListItemIcon>
-          <ListItemText>
-            <Link href="/about" component={NextLink}>
-              <a>About</a>
-            </Link>
-          </ListItemText>
-        </ListItem>
-        <ListItem button onClick={handleListItemClicked}>
-          <ListItemIcon>
             <AddComment />
           </ListItemIcon>
           <ListItemText>
             <Link href="/posts/new" component={NextLink}>
               <a>Add Post</a>
+            </Link>
+          </ListItemText>
+        </ListItem>
+        <ListItem button onClick={handleListItemClicked}>
+          <ListItemIcon>
+            <Info />
+          </ListItemIcon>
+          <ListItemText>
+            <Link href="/about" component={NextLink}>
+              <a>About</a>
             </Link>
           </ListItemText>
         </ListItem>

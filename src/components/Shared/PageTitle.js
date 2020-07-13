@@ -13,7 +13,7 @@ const PageTitle = ({ title }) => {
   const classes = useStyles();
 
   return (
-    <Box mb={2} pt={2}>
+    <Box mb={3}>
       <Typography variant="h4" component="h3" className={classes.title}>
         {title}
       </Typography>

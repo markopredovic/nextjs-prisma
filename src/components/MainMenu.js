@@ -23,11 +23,11 @@ const MainMenu = () => {
       <Link href="/" component={NextLink}>
         <a>Home</a>
       </Link>
-      <Link href="/about" component={NextLink}>
-        <a>About</a>
-      </Link>
       <Link href="/posts/new" component={NextLink}>
         <a>Add Post</a>
+      </Link>
+      <Link href="/about" component={NextLink}>
+        <a>About</a>
       </Link>
     </Box>
   );

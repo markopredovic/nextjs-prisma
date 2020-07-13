@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 
 import Layout from "../../components/UI/Layout";
-import PageTitle from "../../components/Shared/PageTitle";
 import PostDetails from "../../components/PostDetails";
 
 const PostDetailsPage = () => {
@@ -19,9 +18,10 @@ const PostDetailsPage = () => {
     return <div>Error ...</div>;
   }
 
+  console.log("data", data);
+
   return (
     <Layout>
-      <PageTitle title="Post details" />
       <PostDetails post={data.post} />
     </Layout>
   );
