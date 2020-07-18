@@ -2,7 +2,16 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const getPost = async (id) => {
+interface IUpdateData {
+  id: number;
+  title: string;
+  content: string;
+  featured: boolean;
+  archived: boolean;
+  imageUrl: string;
+}
+
+const getPost = async (id: number) => {
   try {
     return prisma.post.findOne({
       where: {
@@ -13,7 +22,7 @@ const getPost = async (id) => {
     throw new Error("Unable to fetch post");
   }
 };
-const deletePost = async (id) => {
+const deletePost = async (id: number) => {
   try {
     return prisma.post.delete({
       where: {
@@ -24,7 +33,7 @@ const deletePost = async (id) => {
     throw new Error("Unable to delete post");
   }
 };
-const updatePost = async (id, updatedData) => {
+const updatePost = async (id: number, updatedData: IUpdateData) => {
   try {
     return prisma.post.update({
       where: { id },

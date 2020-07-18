@@ -1,103 +1,69 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
-import { Formik } from "formik";
+import React, { useContext, useState, FunctionComponent } from "react";
+import { Formik, FormikHelpers } from "formik";
 import {
   Box,
   TextField,
   Button,
-  Typography,
-  FormGroup,
   FormControlLabel,
   Checkbox,
+  FormGroup,
   Snackbar,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import { makeStyles } from "@material-ui/styles";
 import * as yup from "yup";
 
 import AppContext from "../../context/appContext";
 
-const useStyles = makeStyles({
-  root: {
-    "& input[type='file']": {
-      zIndex: "3",
-    },
-  },
-});
+interface PostProps {
+  id: number;
+  title: string;
+  content: string;
+  archived: boolean;
+  featured: boolean;
+  imageUrl: string | null;
+}
 
-const CLOUDINARY_ClOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_ClOUD_NAME;
+export interface EditPostProps {
+  post: PostProps;
+}
 
-const AddPostForm = () => {
-  const classes = useStyles();
+const EditPostForm: FunctionComponent<EditPostProps> = ({ post }) => {
   const context = useContext(AppContext);
   const initialValues = {
-    title: "",
-    content: "",
-    featured: false,
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    archived: post.archived,
+    featured: post.featured,
+    imageUrl: post.imageUrl,
   };
   const [open, setOpen] = useState(false);
-  let imageRef = useRef(null);
 
   const validationSchema = yup.object({
     title: yup.string().required().min(2).max(100),
     content: yup.string().required().min(20),
   });
 
-  const uploadImageToCloudinary = () => {
-    const { files } = imageRef.current;
-    const formData = new FormData();
-
-    formData.append("file", files[0]);
-    // replace this with your upload preset name
-    formData.append("upload_preset", "xuizbgdu");
-    const options = {
-      method: "POST",
-      body: formData,
-    };
-
-    return fetch(
-      `https://api.Cloudinary.com/v1_1/${CLOUDINARY_ClOUD_NAME}/image/upload`,
-      options
-    )
-      .then((res) => res.json())
-      .catch((err) => console.log(err));
-  };
-
-  const addPostHandler = async (values, { setSubmitting, resetForm }) => {
-    // post to api
+  const updatePostHandler = async (
+    values: PostProps,
+    { setSubmitting }: FormikHelpers<PostProps>
+  ) => {
     try {
       setOpen(false);
-      // upload to cloudinary
-      let imageObj = null;
-      if (imageRef.current) {
-        imageObj = await uploadImageToCloudinary();
-      }
-      // get cloudinary url
-      const postValues = {
-        ...values,
-        imageUrl: imageObj ? imageObj.url : null,
-      };
-      // update values
-      console.log("values", postValues);
-      // add post
-      await context.addPost(postValues);
+      await context.updatePost(post.id, { ...values });
     } catch (e) {
       console.log("e", e);
     } finally {
       setSubmitting(false);
-      resetForm();
       setOpen(true);
     }
-  };
-
-  const handleImageUpload = async () => {
-    imageRef.current = document.querySelector("#addPostImageUpload");
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={addPostHandler}
+      onSubmit={updatePostHandler}
     >
       {({
         values,
@@ -108,10 +74,10 @@ const AddPostForm = () => {
         isSubmitting,
         touched,
       }) => (
-        <Box width="1" className={classes.root}>
+        <Box width="1">
           <form onSubmit={handleSubmit}>
             <TextField
-              id="addPostTitle"
+              id="editPostTitle"
               label="Title"
               name="title"
               value={values.title}
@@ -124,12 +90,11 @@ const AddPostForm = () => {
               margin="normal"
               fullWidth={true}
             />
-
             <TextField
-              id="addPostContent"
-              label="Content"
+              id="editPostContent"
               multiline={true}
               rows={4}
+              label="Content"
               name="content"
               value={values.content}
               onChange={handleChange}
@@ -145,6 +110,18 @@ const AddPostForm = () => {
               <FormControlLabel
                 control={
                   <Checkbox
+                    checked={values.archived}
+                    onChange={handleChange}
+                    name="archived"
+                  />
+                }
+                label="Move to archive"
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
                     checked={values.featured}
                     onChange={handleChange}
                     name="featured"
@@ -153,27 +130,16 @@ const AddPostForm = () => {
                 label="Featured"
               />
             </FormGroup>
-            <TextField
-              id="addPostImageUpload"
-              label="Upload Image"
-              name="imageUrl"
-              type="file"
-              onChange={handleImageUpload}
-              variant="outlined"
-              size="small"
-              margin="normal"
-              fullWidth={true}
-            />
-            <Typography align="right">
+            <Box display="flex" justifyContent="end">
               <Button
                 variant="contained"
                 color="primary"
-                disabled={isSubmitting}
                 type="submit"
+                disabled={isSubmitting}
               >
-                Add
+                Edit
               </Button>
-            </Typography>
+            </Box>
           </form>
           <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -187,7 +153,7 @@ const AddPostForm = () => {
               elevation={6}
               variant="filled"
             >
-              Post added!
+              Post edited!
             </Alert>
           </Snackbar>
         </Box>
@@ -196,4 +162,4 @@ const AddPostForm = () => {
   );
 };
 
-export default AddPostForm;
+export default EditPostForm;

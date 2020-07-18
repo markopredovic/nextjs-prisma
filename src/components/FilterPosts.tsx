@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, ChangeEvent } from "react";
 import {
   Box,
   FormControl,
@@ -15,11 +14,16 @@ const useStyles = makeStyles({
   },
 });
 
-const FilterPosts = ({ filterPosts, currentFilter }) => {
+interface FilterPostsProps {
+  filterPosts: (filterText: string) => void;
+  currentFilter: string;
+}
+
+const FilterPosts = ({ filterPosts, currentFilter }: FilterPostsProps) => {
   const classes = useStyles();
   const [value, setValue] = useState(currentFilter);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     filterPosts(e.target.value);
   };
@@ -52,8 +56,3 @@ const FilterPosts = ({ filterPosts, currentFilter }) => {
 };
 
 export default FilterPosts;
-
-FilterPosts.propTypes = {
-  filterPosts: PropTypes.func,
-  currentFilter: PropTypes.string,
-};

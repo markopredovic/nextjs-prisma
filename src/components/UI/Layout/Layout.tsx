@@ -1,11 +1,16 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FC } from "react";
 import PropTypes from "prop-types";
 import { Container, Box } from "@material-ui/core";
 
 import Header from "../../Header";
 import Footer from "../../Footer";
 
-const Layout = ({ children }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout: FC<LayoutProps> = ({ children }) => {
+  children;
   return (
     <Fragment>
       <Header />

@@ -1,8 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import { Box, Typography, CardMedia, Button } from "@material-ui/core";
 import { ArrowBack } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Router from "next/router";
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +23,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PostDetails = ({ post: { title, imageUrl, content } }) => {
+interface PostProps {
+  title: string;
+  imageUrl: string;
+  content: string;
+}
+
+interface PostDetailsProps {
+  post: PostProps;
+}
+
+const PostDetails: FC<PostDetailsProps> = ({
+  post: { title, imageUrl, content },
+}) => {
   const classes = useStyles();
 
   const handleBack = () => {
@@ -44,12 +55,7 @@ const PostDetails = ({ post: { title, imageUrl, content } }) => {
       <Typography paragraph variant="body1">
         {content}
       </Typography>
-      <Button
-        variant="default"
-        onClick={handleBack}
-        className={classes.button}
-        startIcon={<ArrowBack />}
-      >
+      <Button variant="text" onClick={handleBack} startIcon={<ArrowBack />}>
         back
       </Button>
     </Box>
@@ -57,7 +63,3 @@ const PostDetails = ({ post: { title, imageUrl, content } }) => {
 };
 
 export default PostDetails;
-
-PostDetails.propTypes = {
-  post: PropTypes.object,
-};

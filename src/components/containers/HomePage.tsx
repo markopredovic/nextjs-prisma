@@ -15,7 +15,7 @@ export default function Homepage() {
   if (!data) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
 
-  const handleFilter = (filter) => {
+  const handleFilter = (filter: string) => {
     setCurrentFilter(filter);
   };
 

@@ -1,43 +1,96 @@
-import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
-import { Formik } from "formik";
+import React, { useContext, useState, useRef } from "react";
+import { Formik, FormikHelpers } from "formik";
 import {
   Box,
   TextField,
   Button,
+  Typography,
+  FormGroup,
   FormControlLabel,
   Checkbox,
-  FormGroup,
   Snackbar,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
+import { makeStyles } from "@material-ui/styles";
 import * as yup from "yup";
 
 import AppContext from "../../context/appContext";
+import { IAddPost } from "../../models";
 
-const EditPostForm = ({ post }) => {
+const useStyles = makeStyles({
+  root: {
+    "& input[type='file']": {
+      zIndex: "3",
+    },
+  },
+});
+
+const CLOUDINARY_ClOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_ClOUD_NAME;
+
+const AddPostForm = () => {
+  const classes = useStyles();
   const context = useContext(AppContext);
-  const initialValues = {
-    title: post.title,
-    content: post.content,
-    archived: post.archived,
-    featured: post.featured,
+  const initialValues: IAddPost = {
+    title: "",
+    content: "",
+    featured: false,
+    archived: false,
+    imageUrl: null,
   };
   const [open, setOpen] = useState(false);
+  let imageRef = useRef<HTMLInputElement>(null);
 
   const validationSchema = yup.object({
     title: yup.string().required().min(2).max(100),
     content: yup.string().required().min(20),
   });
 
-  const addPostHandler = async (values, { setSubmitting }) => {
+  const uploadImageToCloudinary = () => {
+    const { files } = imageRef.current as HTMLInputElement;
+    const formData = new FormData();
+
+    if (files) formData.append("file", files[0]);
+    // replace this with your upload preset name
+    formData.append("upload_preset", "xuizbgdu");
+    const options = {
+      method: "POST",
+      body: formData,
+    };
+
+    return fetch(
+      `https://api.Cloudinary.com/v1_1/${CLOUDINARY_ClOUD_NAME}/image/upload`,
+      options
+    )
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
+  };
+
+  const addPostHandler = async (
+    values: IAddPost,
+    { setSubmitting, resetForm }: FormikHelpers<IAddPost>
+  ) => {
+    // post to api
     try {
       setOpen(false);
-      await context.updatePost(post.id, { ...post, ...values });
+      // upload to cloudinary
+      let imageObj = null;
+      if (imageRef.current) {
+        imageObj = await uploadImageToCloudinary();
+      }
+      // get cloudinary url
+      const postValues = {
+        ...values,
+        imageUrl: imageObj ? imageObj.url : null,
+      };
+      // update values
+      console.log("values", postValues);
+      // add post
+      await context.addPost(postValues);
     } catch (e) {
       console.log("e", e);
     } finally {
       setSubmitting(false);
+      resetForm();
       setOpen(true);
     }
   };
@@ -57,10 +110,10 @@ const EditPostForm = ({ post }) => {
         isSubmitting,
         touched,
       }) => (
-        <Box width="1">
+        <Box width="1" className={classes.root}>
           <form onSubmit={handleSubmit}>
             <TextField
-              id="editPostTitle"
+              id="addPostTitle"
               label="Title"
               name="title"
               value={values.title}
@@ -73,11 +126,12 @@ const EditPostForm = ({ post }) => {
               margin="normal"
               fullWidth={true}
             />
+
             <TextField
-              id="editPostContent"
+              id="addPostContent"
+              label="Content"
               multiline={true}
               rows={4}
-              label="Content"
               name="content"
               value={values.content}
               onChange={handleChange}
@@ -93,18 +147,6 @@ const EditPostForm = ({ post }) => {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={values.archived}
-                    onChange={handleChange}
-                    name="archived"
-                  />
-                }
-                label="Move to archive"
-              />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
                     checked={values.featured}
                     onChange={handleChange}
                     name="featured"
@@ -113,16 +155,27 @@ const EditPostForm = ({ post }) => {
                 label="Featured"
               />
             </FormGroup>
-            <Box display="flex" justifyContent="end">
+            <TextField
+              id="addPostImageUpload"
+              label="Upload Image"
+              name="imageUrl"
+              type="file"
+              inputRef={imageRef}
+              variant="outlined"
+              size="small"
+              margin="normal"
+              fullWidth={true}
+            />
+            <Typography align="right">
               <Button
                 variant="contained"
                 color="primary"
-                type="submit"
                 disabled={isSubmitting}
+                type="submit"
               >
-                Edit
+                Add
               </Button>
-            </Box>
+            </Typography>
           </form>
           <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -136,7 +189,7 @@ const EditPostForm = ({ post }) => {
               elevation={6}
               variant="filled"
             >
-              Post edited!
+              Post added!
             </Alert>
           </Snackbar>
         </Box>
@@ -145,8 +198,4 @@ const EditPostForm = ({ post }) => {
   );
 };
 
-export default EditPostForm;
-
-EditPostForm.propTypes = {
-  post: PropTypes.object,
-};
+export default AddPostForm;

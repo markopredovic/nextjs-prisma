@@ -1,15 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FunctionComponent } from "react";
 import { Box, Typography, makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   title: {
     textTransform: "uppercase",
-    fontWeight: "600",
+    "font-weight": "600",
   },
-}));
+});
 
-const PageTitle = ({ title }) => {
+interface PageTitleProps {
+  title: string;
+}
+
+const PageTitle: FunctionComponent<PageTitleProps> = ({ title }) => {
   const classes = useStyles();
 
   return (
@@ -22,7 +25,3 @@ const PageTitle = ({ title }) => {
 };
 
 export default PageTitle;
-
-PageTitle.propTypes = {
-  title: PropTypes.string,
-};
