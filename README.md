@@ -1,10 +1,11 @@
-### Fullstack javascript app
+### Fullstack javascript(typescript) app
 
 Example CRUD application using [Jamstack](https://jamstack.org/)
 
 ### Features
 
 - [Next js](https://nextjs.org/)
+- Typescript
 - [Swr](https://swr.vercel.app/) fetching data
 - CRUD operations
 - [Prisma](https://www.prisma.io/) ORM
